@@ -1,0 +1,4 @@
+uptime
+hostname
+uname -a
+df -h

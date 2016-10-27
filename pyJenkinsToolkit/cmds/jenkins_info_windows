@@ -1,0 +1,4 @@
+whoami
+hostname
+wmic os get Caption /value
+wmic LogicalDisk Where DriveType=3 Get DeviceID,FreeSpace

@@ -1,0 +1,42 @@
+######## Host:http://37.205.9.31:8080/jenkins/script #########
+
+ 21:22:41 up 4 days, 19:29,  0 users,  load average: 0.00, 0.00, 0.00
+ns2
+Linux ns2 2.6.32-042stab120.3 #1 SMP Thu Oct 20 18:18:21 MSK 2016 x86_64 GNU/Linux
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/simfs      120G  102G   19G  85% /
+tmpfs           410M   52K  410M   1% /run
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs           820M     0  820M   0% /run/shm
+
+
+##########################################################
+
+######## Host:http://37.205.9.31:8080/jenkins/script #########
+
+ 21:23:01 up 4 days, 19:29,  0 users,  load average: 0.00, 0.00, 0.00
+ns2
+Linux ns2 2.6.32-042stab120.3 #1 SMP Thu Oct 20 18:18:21 MSK 2016 x86_64 GNU/Linux
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/simfs      120G  102G   19G  85% /
+tmpfs           410M   52K  410M   1% /run
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs           820M     0  820M   0% /run/shm
+
+
+##########################################################
+
+######## Host:http://37.205.9.31:8080/jenkins/script #########
+
+ 21:24:04 up 4 days, 19:30,  0 users,  load average: 0.00, 0.00, 0.00
+ns2
+Linux ns2 2.6.32-042stab120.3 #1 SMP Thu Oct 20 18:18:21 MSK 2016 x86_64 GNU/Linux
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/simfs      120G  102G   19G  85% /
+tmpfs           410M   52K  410M   1% /run
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs           820M     0  820M   0% /run/shm
+
+
+##########################################################
+

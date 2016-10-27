@@ -12,6 +12,9 @@
     <OutputPath>.</OutputPath>
     <Name>pyJenkinsToolkit</Name>
     <RootNamespace>pyJenkinsToolkit</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>-u http://37.205.9.31:8080/jenkins/script -m info</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,6 +30,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="pyJenkinsToolkit.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="cmds\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cmds\jenkins_info_linux" />
+    <Content Include="cmds\jenkins_info_windows" />
+    <Content Include="cmds\jenkins_shell_linux" />
+    <Content Include="cmds\jenkins_shell_windows" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
