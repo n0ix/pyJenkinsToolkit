@@ -13,7 +13,7 @@
     <Name>pyJenkinsToolkit</Name>
     <RootNamespace>pyJenkinsToolkit</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-u http://37.205.9.31:8080/jenkins/script -m info</CommandLineArguments>
+    <CommandLineArguments>-u urllist.txt -m info -o result.txt</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

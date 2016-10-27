@@ -245,3 +245,5 @@ ModelManifest.xml
 jenkins_shell_linux
 jenkins_shell_windows
 .txt
+urllist.txt
+/pyJenkinsToolkit/result.txt
