@@ -242,4 +242,6 @@ ModelManifest.xml
 .fake/
 
 #Sonstiges
-
+jenkins_shell_linux
+jenkins_shell_windows
+.txt
