@@ -12,13 +12,14 @@ System Requirements:
 - Python Module 'argparse'
 - Python Module 'urlparse'
 
+```
 usage: pyJenkinsToolkit.py [-h] -u URL [URL ...] [-m {info,shell}] [-o OUTPUT]
                            [-spw SHELLPASSWORD] [-sp SHELLPORT]
                            [-st {perl,python}] [-v]
-
 Jenkins Toolkit
 
 optional arguments:
+
   -h, --help            show this help message and exit
   -u URL [URL ...], --url URL [URL ...]
                         <Required> One or more Jenkins Urls to process. You
@@ -36,3 +37,5 @@ optional arguments:
                         <Optional (Mode Shell)> Specifies Shell Script Type -
                         Default:"perl"
   -v, --verbose         Show Debug Information
+  
+  ```
