@@ -199,11 +199,18 @@ parser = argparse.ArgumentParser(description='Jenkins Toolkit')
 
 parser.add_argument('-u','--url', nargs='+', help='<Required> One or more Jenkins Urls to process. You can also specifiy a text file with the urls in it', required=True, type=str)
 parser.add_argument("-m", "--mode", type=str, choices=['info','shell'], help='<Required> Specifies the Toolkit Mode')
-parser.add_argument('-o','--output', help='<Optional> File where the output is written (Only if Mode = Info)', type=str, default=None)
-parser.add_argument('-spw','--shellpassword', help='<Optional> Password for Shell', type=str, default='none')
-parser.add_argument('-sp','--shellport', help='<Required (Mode Shell)> Port Bind Shell', type=int, default=0)
-parser.add_argument("-st", "--shelltype", type=str, choices=['perl','python'], help='<Optional (Mode Shell)> Specifies Shell Script Type - Default:"perl"', default="perl")
 parser.add_argument("-v", "--verbose", help="Show Debug Information",action="store_true")
+
+_pgroup_mode_shell = parser.add_argument_group("Toolkit Mode: Shell")
+
+_pgroup_mode_shell.add_argument('-spw','--shellpassword', help='<Optional> Password for Shell', type=str, default=None)
+_pgroup_mode_shell.add_argument('-sp','--shellport', help='<Required> Port Bind Shell', type=int, default=0)
+_pgroup_mode_shell.add_argument("-st", "--shelltype", type=str, choices=['perl','python'], help='<Optional> Specifies Shell Script Type - Default:"perl"', default="perl")
+
+_pgroup_mode_info = parser.add_argument_group("Toolkit Mode: Info")
+
+_pgroup_mode_info.add_argument('-o','--output', help='<Optional> File where the output is written', type=str, default=None)
+
 args = parser.parse_args()
 
 init()
