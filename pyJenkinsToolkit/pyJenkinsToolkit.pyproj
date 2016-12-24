@@ -39,6 +39,7 @@
     <Content Include="cmds\jenkins_info_windows" />
     <Content Include="cmds\jenkins_shell_linux" />
     <Content Include="cmds\jenkins_shell_windows" />
+    <Content Include="requirements.txt" />
   </ItemGroup>
   <Import Condition="Exists($(PtvsTargetsFile))" Project="$(PtvsTargetsFile)" />
   <Import Condition="!Exists($(PtvsTargetsFile))" Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

