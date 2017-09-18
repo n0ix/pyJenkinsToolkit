@@ -227,7 +227,7 @@ _pgroup_mode_pushfile = parser.add_argument_group("Toolkit Mode: Pushfile")
 _pgroup_mode_pushfile.add_argument('-f','--file', help='<Required> File to push to Jenkins Host', type=str, default=None)
 
 _pgroup_mode_exec_command = parser.add_argument_group("Toolkit Mode: Exec Command")
-_pgroup_mode_exec_command.add_argument('-c','--command', help='<Required> Command to execute', type=str, default=None)
+_pgroup_mode_exec_command.add_argument('-c','--command', help='<Required> Command to execute. The command should be quoted in quotation marks', type=str, default=None)
 
 
 args = parser.parse_args()
